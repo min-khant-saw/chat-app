@@ -4,6 +4,8 @@ import { addMessage, getAllUser } from "../components/Api/chat/ChatUser";
 import Chatting from "../components/Chat/Chatting";
 import Conversation from "../components/Conversation/Conversation";
 import { io } from "socket.io-client";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBars } from "@fortawesome/free-solid-svg-icons";
 
 const Chat = () => {
   const [socket, setSocket] = useState();
@@ -16,7 +18,7 @@ const Chat = () => {
   const [status, setStatus] = useState([]);
   const [sendMessage, setSendMessage] = useState();
   const [receiveMessage, setReceiveMessage] = useState(null);
-
+  const [isOpen, setIsOpen] = useState(false);
   useEffect(() => {
     getAllUser(setAllUsers);
   }, []);
@@ -59,8 +61,6 @@ const Chat = () => {
     }
   };
 
-  console.log(message);
-
   useEffect(() => {
     socket?.on("recieve-message", (data) => {
       console.log(data);
@@ -69,27 +69,43 @@ const Chat = () => {
   }, [createMessage, sendMessage]);
   return (
     <div className="w-full flex justify-start flex-row">
-      <div className="w-80 bg-gray-700 h-screen sticky left-0 top-0 max-md:hidden">
-        <div className="flex flex-col p-2 border-b">
-          <span className="text-white">
-            <span className="text-yellow-300 mr-2">You:</span>
-            <span className="font-bold text-slate-200">
-              {allUsers
-                .filter((id) => id?._id == currentUser)
-                .map((d) => d.userName)}
+      <div
+        className={`w-80 bg-gray-700 h-screen sticky left-0 top-0 overflow-hidden transition-all duration-500 whitespace-nowrap ${
+          isOpen ? "w-80" : "w-0"
+        }`}
+      >
+        <div>
+          <div className="flex flex-col p-2 border-b">
+            <span className="text-white">
+              <span className="text-yellow-300 mr-2">You:</span>
+              <span className="font-bold text-slate-200">
+                {allUsers
+                  .filter((id) => id?._id == currentUser)
+                  .map((d) => d.userName)}
+              </span>
             </span>
-          </span>
-          <span className="text-green-300">
-            {allUsers.find((user) => status.find((s) => s.userId === user._id))
-              ? "Online"
-              : "Offline"}
-          </span>
+            <span className="text-green-300">
+              {allUsers.find((user) =>
+                status.find((s) => s.userId === user._id)
+              )
+                ? "Online"
+                : "Offline"}
+            </span>
+          </div>
+          <Conversation
+            users={allUsers}
+            status={status}
+            currentUser={currentUser}
+            setChatUser={setChatUser}
+          />
         </div>
-        <Conversation
-          users={allUsers}
-          status={status}
-          currentUser={currentUser}
-          setChatUser={setChatUser}
+      </div>
+      <div className="fixed z-20 right-3 top-[19px] text-xl text-stone-200">
+        <FontAwesomeIcon
+          icon={faBars}
+          onClick={() => setIsOpen(!isOpen)}
+          size="1x"
+          cursor="pointer"
         />
       </div>
       <div className="w-full">

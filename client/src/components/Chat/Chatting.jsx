@@ -42,6 +42,7 @@ const Chatting = ({
     const onlineUser = status?.some((id) => id?.userId == chatUser._id);
     return onlineUser;
   };
+
   return (
     <div className="w-full flex flex-col justify-between min-h-screen">
       {chatUser ? (
@@ -65,7 +66,9 @@ const Chatting = ({
           </div>
         </>
       ) : (
-        "No Conversation"
+        <div className="text-center text-white text-2xl font-semibold flex flex-col justify-center items-center h-screen">
+          No Conversation here...
+        </div>
       )}
     </div>
   );

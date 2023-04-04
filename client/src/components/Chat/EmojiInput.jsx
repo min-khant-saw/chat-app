@@ -11,10 +11,10 @@ const EmojiInput = ({
   createMessage,
 }) => {
   return (
-    <div className="w-full p-2">
-      <div className="w-full flex justify-center gap-x-2">
-        <div className="w-full mt-auto relative">
-          <div className="flex gap-x-2">
+    <div className="w-full p-2 relative max-md:p-0">
+      <div className="w-full">
+        <div className="w-full mt-auto max-md:mb-3">
+          <div className="flex gap-x-2 max-md:mx-2 mt-2">
             <input
               type="text"
               className="w-full h-max p-2 bg-transparent border border-gray-500 rounded text-stone-200 outline-none focus:ring-2 focus:ring-gray-600 transition-all"
@@ -23,7 +23,7 @@ const EmojiInput = ({
               placeholder="Message..."
             />
             <span
-              className="absolute right-20 -mr-1 top-2 text-white/60 select-none cursor-pointer"
+              className="absolute right-20 -translate-x-1 translate-y-1 -mr-1 top-5 text-white/60 select-none cursor-pointer max-md:top-2 max-md:translate-y-0"
               onClick={() => setIsOpen(!isOpen)}
             >
               <FontAwesomeIcon icon={faSmile} size="xl" />
@@ -36,11 +36,17 @@ const EmojiInput = ({
             </button>
           </div>
         </div>
-        <div className={`${isOpen ? "block" : "hidden"}`}>
+        <div
+          className={`${
+            isOpen ? "opacity-100 h-[350px]" : "opacity-0"
+          } overflow-hidden absolute -top-72 h-0 -translate-y-16 right-5 transition-all duration-700 max-md:relative max-md:top-0 max-md:right-0 max-md:translate-y-0 max-md:w-full`}
+        >
           <EmojiPicker
             theme="dark"
             lazyLoadEmojis={true}
             onEmojiClick={(e) => setNewMessage((prev) => (prev += e.emoji))}
+            height={350}
+            width={"auto"}
           />
         </div>
       </div>
