@@ -39,7 +39,7 @@ const setNewChat = async (formData) => {
 const addMessage = async (formData) => {
   try {
     const message = await server.post("message", formData);
-    return console.log(message.data);
+    return message.data;
   } catch (error) {
     console.log(error.message);
   }
