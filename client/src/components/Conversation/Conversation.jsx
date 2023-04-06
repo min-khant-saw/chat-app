@@ -13,14 +13,14 @@ const Conversation = ({ users, currentUser, setChatUser, status }) => {
           return (
             <React.Fragment key={i}>
               <div
-                className={`flex flex-col p-2 border-b border-gray-500 ${
+                className={`flex flex-col p-2 border-b border-gray-500 cursor-pointer ${
                   onlineUserCheck(user) ? "order-1" : "order-2"
                 }`}
                 onClick={() => setChatUser(user)}
               >
                 <span className="text-white">{user.userName}</span>
                 <span
-                  className={`${
+                  className={`select-none ${
                     onlineUserCheck(user) ? "text-green-300" : "text-white/70"
                   }`}
                 >

@@ -24,10 +24,12 @@ const Register = () => {
   const formData = new FormData();
   const submit = (e) => {
     e.preventDefault();
-    formData.append("userName", state.userName);
-    formData.append("email", state.email);
-    formData.append("password", state.password);
-    return register(formData);
+    if (state.userName && state.email && state.password) {
+      formData.append("userName", state.userName);
+      formData.append("email", state.email);
+      formData.append("password", state.password);
+      return register(formData);
+    }
   };
   return (
     <div className="w-full flex justify-center flex-col items-center h-screen">

@@ -4,6 +4,8 @@ import server from "./components/Api/axiosClient";
 import Login from "./components/Auth/Login";
 import Register from "./components/Auth/Register";
 import Chat from "./Page/Chat";
+import NotFound from "./Page/NotFound";
+import Home from "./Page/Home";
 
 export const UserID = createContext();
 
@@ -22,15 +24,16 @@ const App = () => {
           <Route
             path="/"
             element={
-              id === "Request failed with status code 401" ? (
-                <>No user</>
-              ) : (
-                <Chat />
-              )
+              id === "Request failed with status code 401" ? <Home /> : <Chat />
             }
           />
-          <Route path="/register" element={<Register />} />
-          <Route path="/login" element={<Login />} />
+          {id === "Request failed with status code 401" && (
+            <>
+              <Route path="/register" element={<Register />} />
+              <Route path="/login" element={<Login />} />
+            </>
+          )}
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </UserID.Provider>
     </div>

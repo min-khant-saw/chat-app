@@ -11,6 +11,8 @@ const Message = ({ message, currentUser }) => {
   return (
     <div className="mt-3 w-full flex justify-between flex-col gap-y-3 overflow-auto">
       {message?.map((msg, i) => {
+        const splitImg =
+          `${import.meta.env.VITE_SERVER_URL}/` + msg.file?.split("/")[1];
         return (
           <div className="w-full flex flex-col" key={i} ref={scrollMessage}>
             <div
@@ -20,8 +22,17 @@ const Message = ({ message, currentUser }) => {
                   : "mr-auto items-start"
               }`}
             >
+              {splitImg !== `${import.meta.env.VITE_SERVER_URL}/undefined` ? (
+                <img
+                  src={splitImg}
+                  alt={splitImg}
+                  className="w-48 h-40 object-cover rounded"
+                />
+              ) : null}
               <div
-                className={`p-2.5 rounded text-base font-semibold w-max ${
+                className={`rounded text-base font-semibold w-max ${
+                  !msg.message.length ? "p-0" : "p-2.5"
+                } ${
                   msg.senderId === currentUser
                     ? "float-right text-black bg-slate-200"
                     : "float-left text-white bg-gray-700"

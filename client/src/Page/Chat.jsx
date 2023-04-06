@@ -13,6 +13,7 @@ const Chat = () => {
   const currentUser = useContext(UserID);
   const [chatUser, setChatUser] = useState();
   const [newMessage, setNewMessage] = useState("");
+  const [newFile, setNewFile] = useState(null);
   const [message, setMessage] = useState([]);
   const [chat, setChat] = useState(null);
   const [status, setStatus] = useState([]);
@@ -38,40 +39,53 @@ const Chat = () => {
   }, [sendMessage]);
 
   const formData = new FormData();
-  const createMessage = () => {
-    if (newMessage.length) {
+  const createMessage = (e) => {
+    e.preventDefault();
+    if (newMessage.length || newFile !== null) {
       formData.append("chatId", chat?._id);
       formData.append("senderId", currentUser);
       formData.append("message", newMessage);
+      formData.append(
+        "image",
+        newFile === null ? "Storage/undefined" : newFile
+      );
       const receiverId = chat?.members?.find((id) => id !== currentUser);
+      const fileChecker =
+        newFile === null ? "Storage/undefined" : "Storage/" + newFile.name;
       setSendMessage({
         chatId: chat?._id,
         senderId: currentUser,
         message: newMessage,
+        file: fileChecker,
         receiverId,
       });
       setMessage((msg) => {
         return [
           ...msg,
-          { chatId: chat?._id, senderId: currentUser, message: newMessage },
+          {
+            chatId: chat?._id,
+            senderId: currentUser,
+            message: newMessage,
+            file: fileChecker,
+          },
         ];
       });
-      addMessage(formData);
-      return setNewMessage("");
+      setNewFile(null);
+      setNewMessage("");
+      return addMessage(formData);
     }
   };
 
   useEffect(() => {
     socket?.on("recieve-message", (data) => {
-      console.log(data);
       setReceiveMessage(data);
     });
   }, [createMessage, sendMessage]);
   return (
     <div className="w-full flex justify-start flex-row">
       <div
-        className={`w-80 bg-gray-700 h-screen sticky left-0 top-0 overflow-hidden transition-all duration-500 whitespace-nowrap ${
-          isOpen ? "w-80" : "w-0"
+        className={`bg-gray-700 h-screen sticky max-md:fixed left-0 top-0 overflow-hidden transition-all duration-500 whitespace-nowrap z-20 ${
+          isOpen ? "w-[500px] max-md:w-full" : "w-0"
         }`}
       >
         <div>
@@ -80,12 +94,12 @@ const Chat = () => {
               <span className="text-yellow-300 mr-2">You:</span>
               <span className="font-bold text-slate-200">
                 {allUsers
-                  .filter((id) => id?._id == currentUser)
+                  ?.filter((id) => id?._id == currentUser)
                   .map((d) => d.userName)}
               </span>
             </span>
             <span className="text-green-300">
-              {allUsers.find((user) =>
+              {allUsers?.find((user) =>
                 status.find((s) => s.userId === user._id)
               )
                 ? "Online"
@@ -108,7 +122,7 @@ const Chat = () => {
           cursor="pointer"
         />
       </div>
-      <div className="w-full">
+      <div className="w-full z-10">
         <Chatting
           chatUser={chatUser}
           currentUser={currentUser}
@@ -120,6 +134,7 @@ const Chat = () => {
           chat={chat}
           setChat={setChat}
           status={status}
+          setNewFile={setNewFile}
           receiveMessage={receiveMessage}
         />
       </div>

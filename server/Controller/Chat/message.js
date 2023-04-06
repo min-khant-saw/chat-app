@@ -3,7 +3,12 @@ const MessageModel = require("../../Model/message");
 const addMessage = async (req, res) => {
   const { chatId, senderId, message } = req.body;
   try {
-    const newMessage = await MessageModel.create({ chatId, senderId, message });
+    const newMessage = await MessageModel.create({
+      chatId,
+      senderId,
+      message,
+      file: !req.file ? "Storage/undefined" : req.file.path,
+    });
     res.json(newMessage);
   } catch (error) {
     res.json(error);

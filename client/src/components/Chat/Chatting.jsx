@@ -15,6 +15,7 @@ const Chatting = ({
   chat,
   setChat,
   status,
+  setNewFile,
   receiveMessage,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -35,7 +36,6 @@ const Chatting = ({
       setMessage((msg) => {
         return [...msg, receiveMessage];
       });
-      console.log(receiveMessage);
     }
   }, [receiveMessage]);
   const active = () => {
@@ -62,6 +62,7 @@ const Chatting = ({
               newMessage={newMessage}
               setNewMessage={setNewMessage}
               createMessage={createMessage}
+              setNewFile={setNewFile}
             />
           </div>
         </>

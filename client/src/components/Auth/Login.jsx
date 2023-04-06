@@ -21,9 +21,11 @@ const Login = () => {
   const formData = new FormData();
   const submit = (e) => {
     e.preventDefault();
-    formData.append("email", state.email);
-    formData.append("password", state.password);
-    return login(formData);
+    if (state.email && state.password) {
+      formData.append("email", state.email);
+      formData.append("password", state.password);
+      return login(formData);
+    }
   };
   return (
     <div className="w-full flex justify-center flex-col items-center h-screen">

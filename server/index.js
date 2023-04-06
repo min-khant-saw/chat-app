@@ -2,11 +2,18 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
+const upload = require("./Controller/FileSystem/storage");
+const path = require("path");
 const app = express();
+
 require("dotenv").config();
+
 mongoose.connect(`${process.env.MONGO_DB}`);
 
-app.use(express.json());
+app.use(express.static(path.join(__dirname, "Storage")));
+
+app.use(upload.single("image"));
+
 app.use(
   cors({
     credentials: true,
@@ -20,6 +27,7 @@ const profile = require("./Router/profile");
 const users = require("./Router/allUser");
 const chat = require("./Router/chat");
 const message = require("./Router/message");
+
 app.use("/api", user);
 app.use("/api/profile", profile);
 app.use("/api/users", users);

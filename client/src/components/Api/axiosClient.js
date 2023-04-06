@@ -4,7 +4,7 @@ const server = axios.create({
   baseURL: `${import.meta.env.VITE_SERVER_URL}/api`,
   headers: {
     Accept: "application/json",
-    "Content-Type": "application/json",
+    "Content-Type": "multipart/form-data",
   },
   withCredentials: true,
 });
